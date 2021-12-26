@@ -19,6 +19,7 @@ provider:
         - dynamodb:GetItem
         - dynamodb:UpdateItem
         - dynamodb:PutItem
+        - dynamodb:DeleteItem
       Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PIGGY_BANKS_TABLE}"
 
 resources:
@@ -56,3 +57,9 @@ functions:
       - http:
           path: piggybank
           method: put
+  piggy-bank-delete:
+    handler: handler.piggyBankDelete
+    events:
+      - http:
+          path: piggybank
+          method: delete
