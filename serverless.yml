@@ -1,0 +1,58 @@
+service: pyggy-bank
+variablesResolutionMode: 20210326
+
+provider:
+  name: aws
+  memorySize: 128
+  runtime: nodejs12.x
+  lambdaHashingVersion: '20201221'
+  region: us-east-1
+  httpApi:
+    cors: true
+  environment:
+    PIGGY_BANKS_TABLE: PiggyBanks
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:UpdateItem
+        - dynamodb:PutItem
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PIGGY_BANKS_TABLE}"
+
+resources:
+  Resources:
+    PiggyBanksTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.PIGGY_BANKS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+functions:
+  piggy-bank-insert:
+    handler: handler.piggyBankInsert
+    events:
+      - http:
+          path: piggybank
+          method: post
+  piggy-bank-get-all:
+    handler: handler.piggyBankGetAll
+    events:
+      - http:
+          path: piggybank
+          method: get
+  piggy-bank-update:
+    handler: handler.piggyBankUpdate
+    events:
+      - http:
+          path: piggybank
+          method: put

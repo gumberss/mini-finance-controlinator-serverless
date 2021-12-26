@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "aws-sdk": "^2.1048.0",
+    "joi": "^17.5.0",
+    "uuid": "^8.3.2"
+  },
+  "name": "piggy-bank",
+  "version": "1.0.0",
+  "main": "handler.js",
+  "devDependencies": {
+    "aws-sdk": "^2.653.0",
+    "serverless": "^2.69.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
